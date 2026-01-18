@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أذكار المسلم</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: background-color 0.3s, color 0.3s;
+            -webkit-user-select: none;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        body.dark {
+            background-color: #020617;
+            color: #f1f5f9;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding-bottom: 8rem;
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+            transition: opacity 0.5s, background-color 0.5s;
+        }
+
+        body.dark .splash-screen {
+            background-color: #020617;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-icon {
+            background-color: #059669;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(5, 150, 105, 0.3);
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .splash-icon svg {
+            width: 5rem;
+            height: 5rem;
+            display: block;
+        }
+
+        .splash-title {
+            font-size: 2.25rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .splash-subtitle {
+            color: #059669;
+            font-size: 1.25rem;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        body.dark .splash-subtitle {
+            color: #34d399;
+        }
+
+        .splash-loader {
+            position: absolute;
+            bottom: 3rem;
+            width: 2rem;
+            height: 2rem;
+            border: 4px solid #e2e8f0;
+            border-top-color: #059669;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            opacity: 0.5;
+        }
+
+        body.dark .splash-loader {
+            border-color: #1e293b;
+            border-top-color: #059669;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        body.dark .header {
+            background-color: rgba(15, 23, 42, 0.8);
+            border-bottom-color: #1e293b;
+        }
+
+        .header-content {
+            max-width: 640px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-icon {
+            background-color: #059669;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4);
+        }
+
+        .header-icon svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: block;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: -0.025em;
+        }
+
+        .settings-btn {
+            padding: 0.5rem;
+            color: #64748b;
+            background: none;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .settings-btn:hover {
+            color: #059669;
+            background-color: #f1f5f9;
+        }
+
+        body.dark .settings-btn:hover {
+            color: #34d399;
+            background-color: #1e293b;
+        }
+
+        .settings-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 2rem 1rem;
+        }
+
+        .hero-card {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark .hero-card {
+            background-color: #0f172a;
+            border-color: #1e293b;
+        }
+
+        .hero-card::before,
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            width: 10rem;
+            height: 10rem;
+            background-color: rgba(5, 150, 105, 0.1);
+            border-radius: 50%;
+            filter: blur(3rem);
+        }
+
+        body.dark .hero-card::before,
+        body.dark .hero-card::after {
+            background-color: rgba(5, 150, 105, 0.05);
+        }
+
+        .hero-card::before {
+            top: -2.5rem;
+            right: -2.5rem;
+        }
+
+        .hero-card::after {
+            bottom: -2.5rem;
+            left: -2.5rem;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-greeting {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-verse {
+            color: #059669;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        body.dark .hero-verse {
+            color: #34d399;
+        }
+
+        .progress-container {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+
+        body.dark .progress-container {
+            background-color: rgba(2, 6, 23, 0.5);
+            border-color: #1e293b;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+        }
+
+        .progress-percent {
+            color: #059669;
+        }
+
+        body.dark .progress-percent {
+            color: #34d399;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e2e8f0;
+            height: 0.5rem;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        body.dark .progress-bar {
+            background-color: #1e293b;
+        }
+
+        .progress-fill {
+            background-color: #10b981;
+            height: 100%;
+            transition: width 1s ease-out;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Tabs */
+        .tabs-container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0 1rem 1.5rem;
+            position: sticky;
+            top: 73px;
+            z-index: 30;
+        }
+
+        .tabs {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            padding: 0.375rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        body.dark .tabs {
+            background-color: #0f172a;
+            border-color: #1e293b;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: none;
+            color: #64748b;
+        }
+
+        .tab-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        body.dark .tab-btn:hover {
+            background-color: #1e293b;
+        }
+
+        .tab-btn.active {
+            background-color: #059669;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2);
+        }
+
+        /* Athkar List */
+        .athkar-list {
+            padding: 0 1rem;
+        }
+
+        .thikr-card {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 1.5rem;
+            border: 2px solid #e2e8f0;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        body.dark .thikr-card {
+            background-color: #0f172a;
+            border-color: #1e293b;
+        }
+
+        .thikr-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .thikr-card.completed {
+            background-color: #ecfdf5;
+            border-color: #a7f3d0;
+            opacity: 0.9;
+        }
+
+        body.dark .thikr-card.completed {
+            background-color: rgba(6, 78, 59, 0.4);
+            border-color: rgba(6, 120, 90, 0.5);
+        }
+
+        .thikr-reference {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        body.dark .thikr-reference {
+            color: #64748b;
+        }
+
+        .thikr-text {
+            font-size: 1.25rem;
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .thikr-text.small {
+            font-size: 1.125rem;
+        }
+
+        .thikr-text.large {
+            font-size: 1.5rem;
+        }
+
+        .thikr-description {
+            text-align: center;
+            color: rgba(5, 150, 105, 0.8);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        body.dark .thikr-description {
+            color: rgba(52, 211, 153, 0.6);
+        }
+
+        .thikr-counter-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .counter-wrapper {
+            width: 100%;
+            position: relative;
+        }
+
+        .counter-btn {
+            width: 100%;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+
+        body.dark .counter-btn {
+            background-color: #1e293b;
+            color: #cbd5e1;
+        }
+
+        .counter-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        body.dark .counter-btn:hover {
+            background-color: #334155;
+        }
+
+        .counter-btn:active {
+            transform: scale(0.98);
+        }
+
+        .counter-btn.completed {
+            background-color: #059669;
+            color: white;
+            cursor: default;
+            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2);
+        }
+
+        .counter-btn.completed:hover {
+            background-color: #059669;
+        }
+
+        .counter-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            opacity: 0.7;
+        }
+
+        .counter-numbers {
+            font-size: 2.25rem;
+            font-weight: 900;
+        }
+
+        .reset-thikr-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0.75rem;
+            color: #94a3b8;
+            background: none;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .reset-thikr-btn:hover {
+            color: #ef4444;
+            background-color: rgba(226, 232, 240, 0.6);
+        }
+
+        body.dark .reset-thikr-btn:hover {
+            color: #f87171;
+            background-color: rgba(15, 23, 42, 0.6);
+        }
+
+        .reset-thikr-btn:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .reset-thikr-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: block;
+        }
+
+        .thikr-progress-bar {
+            width: 100%;
+            background-color: #e2e8f0;
+            height: 0.375rem;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        body.dark .thikr-progress-bar {
+            background-color: #1e293b;
+        }
+
+        .thikr-progress-fill {
+            background-color: #10b981;
+            height: 100%;
+            transition: width 0.5s ease-out;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .completed-badge {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            color: #10b981;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        body.dark .completed-badge {
+            color: #34d399;
+        }
+
+        .completed-badge svg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        /* Reset All Button */
+        .reset-all-container {
+            padding: 2rem 1rem 3rem;
+        }
+
+        .reset-all-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        body.dark .reset-all-btn {
+            background-color: #0f172a;
+            border-color: #1e293b;
+        }
+
+        .reset-all-btn:hover {
+            background-color: #fef2f2;
+            color: #ef4444;
+        }
+
+        body.dark .reset-all-btn:hover {
+            background-color: rgba(127, 29, 29, 0.2);
+            color: #f87171;
+        }
+
+        .reset-all-btn:active {
+            transform: scale(0.95);
+        }
+
+        .reset-all-btn svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1rem;
+            right: 1rem;
+            z-index: 40;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .bottom-nav-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(24px);
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            gap: 0.5rem;
+            pointer-events: auto;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark .bottom-nav-content {
+            background-color: rgba(15, 23, 42, 0.9);
+            border-color: #1e293b;
+        }
+
+        .nav-btn {
+            padding: 1rem;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: none;
+            color: #94a3b8;
+        }
+
+        body.dark .nav-btn {
+            color: #64748b;
+        }
+
+        .nav-btn:hover {
+            color: #059669;
+        }
+
+        body.dark .nav-btn:hover {
+            color: #34d399;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.9);
+        }
+
+        .nav-btn.active {
+            background-color: #059669;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: block;
+        }
+
+        /* Settings Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background-color: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        body.dark .modal-overlay {
+            background-color: rgba(2, 6, 23, 0.8);
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 1.5rem;
+            width: 100%;
+            max-width: 32rem;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            border: 1px solid #e2e8f0;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+
+        body.dark .modal {
+            background-color: #0f172a;
+            border-color: #1e293b;
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #059669;
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 9999px;
+            transition: background-color 0.2s;
+            color: white;
+        }
+
+        .modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-close svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: block;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+
+        .settings-section:not(:first-child) {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+
+        body.dark .settings-section:not(:first-child) {
+            border-top-color: #1e293b;
+        }
+
+        .settings-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.75rem;
+        }
+
+        body.dark .settings-label {
+            color: #cbd5e1;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .settings-grid.three-cols {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .setting-option {
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid #e2e8f0;
+            background-color: #f8fafc;
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        body.dark .setting-option {
+            border-color: #1e293b;
+            background-color: rgba(30, 41, 59, 0.5);
+        }
+
+        .setting-option:hover {
+            border-color: #cbd5e1;
+        }
+
+        body.dark .setting-option:hover {
+            border-color: #334155;
+        }
+
+        .setting-option.active {
+            border-color: #059669;
+            background-color: #ecfdf5;
+            color: #047857;
+        }
+
+        body.dark .setting-option.active {
+            background-color: rgba(6, 78, 59, 0.3);
+            color: #34d399;
+        }
+
+        .setting-option svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .font-preview {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        body.dark .font-preview {
+            background-color: #020617;
+            border-color: #1e293b;
+        }
+
+        .font-preview-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .font-preview-text {
+            color: #1e293b;
+            line-height: 1.75;
+            transition: font-size 0.3s;
+        }
+
+        body.dark .font-preview-text {
+            color: #cbd5e1;
+        }
+
+        .font-preview-text.small {
+            font-size: 1.125rem;
+        }
+
+        .font-preview-text.medium {
+            font-size: 1.25rem;
+        }
+
+        .font-preview-text.large {
+            font-size: 1.5rem;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-info h3 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.25rem;
+        }
+
+        body.dark .toggle-info h3 {
+            color: #cbd5e1;
+        }
+
+        .toggle-info p {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .toggle {
+            width: 3rem;
+            height: 1.5rem;
+            border-radius: 9999px;
+            background-color: #cbd5e1;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        body.dark .toggle {
+            background-color: #334155;
+        }
+
+        .toggle.active {
+            background-color: #059669;
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 9999px;
+            transition: transform 0.2s;
+            right: 0.25rem;
+        }
+
+        .toggle.active .toggle-thumb {
+            transform: translateX(-1.5rem);
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+            margin-top: auto;
+        }
+
+        body.dark .modal-footer {
+            background-color: #0f172a;
+            border-top-color: #1e293b;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: #059669;
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2);
+            transition: all 0.2s;
+        }
+
+        .save-btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 640px) {
+            .thikr-text {
+                font-size: 1.125rem;
+            }
+            .thikr-text.small {
+                font-size: 1rem;
+            }
+            .thikr-text.large {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+            </svg>
+        </div>
+        <h1 class="splash-title">أذكار المسلم</h1>
+        <p class="splash-subtitle">"أَلا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ"</p>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-logo">
+                <div class="header-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                </div>
+                <h1 class="header-title">أذكار المسلم</h1>
+            </div>
+            <button class="settings-btn" onclick="openSettings()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-card">
+            <div class="hero-content">
+                <h2 class="hero-greeting">السلام عليكم</h2>
+                <p class="hero-verse">"أَلا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ"</p>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span>إنجازك اليومي</span>
+                        <span class="progress-percent" id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('morning')">أذكار الصباح</button>
+            <button class="tab-btn" onclick="switchTab('evening')">أذكار المساء</button>
+        </div>
+    </div>
+
+    <!-- Athkar List -->
+    <div class="container">
+        <main class="athkar-list" id="athkarList">
+            <!-- Cards will be rendered here -->
+        </main>
+
+        <!-- Reset All Button -->
+        <div class="reset-all-container">
+            <button class="reset-all-btn" onclick="resetAll()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <span id="resetAllText">تصفير أذكار الصباح</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-content">
+            <button class="nav-btn active" onclick="switchTab('morning')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                </svg>
+            </button>
+            <button class="nav-btn" onclick="switchTab('evening')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">الإعدادات</h2>
+                <button class="modal-close" onclick="closeSettings()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Theme Setting -->
+                <div class="settings-section">
+                    <label class="settings-label">المظهر</label>
+                    <div class="settings-grid">
+                        <button class="setting-option" onclick="setTheme('light')">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                            </svg>
+                            <span>نهاري</span>
+                        </button>
+                        <button class="setting-option active" onclick="setTheme('dark')">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                            <span>ليلي</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Font Size Setting -->
+                <div class="settings-section">
+                    <label class="settings-label">حجم الخط</label>
+                    <div class="settings-grid three-cols">
+                        <button class="setting-option" onclick="setFontSize('small')">صغير</button>
+                        <button class="setting-option active" onclick="setFontSize('medium')">متوسط</button>
+                        <button class="setting-option" onclick="setFontSize('large')">كبير</button>
+                    </div>
+                    <div class="font-preview">
+                        <p class="font-preview-label">معاينة النص:</p>
+                        <p class="font-preview-text medium" id="fontPreview">أَلا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</p>
+                    </div>
+                </div>
+
+                <!-- Haptic Feedback Setting -->
+                <div class="settings-section">
+                    <div class="toggle-container">
+                        <div class="toggle-info">
+                            <h3>الاهتزاز عند التسبيح</h3>
+                            <p>تنبيه لمسي عند الضغط على العداد</p>
+                        </div>
+                        <div class="toggle" id="hapticToggle" onclick="toggleHaptic()">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="save-btn" onclick="closeSettings()">حفظ التغييرات</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const MORNING_ATHKAR = [
+            { id: 'm_10_asbahna', text: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، وَأَعُوذُ بِكَ مِنْ عَذَابٍ النَّارِ وَعَذَابٍ الْقَبْرِ.', count: 1, reference: '1. رواه مسلم' },
+            { id: 'm_11_bika', text: 'اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ.', count: 1, reference: '2. رواه الترمذي' },
+            { id: 'm_12_ma_asbaha', text: 'اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لاَ شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ.', count: 1, reference: '3. من قالها فقد أدى شكر يومه' },
+            { id: 'm_13_ni3ma', text: 'اللَّهُمَّ إِنِّي أَصْبَحْتُ فِي نِعْمَةٍ وَعَافِيَةٍ وَسِتْرٍ، فَأَتِمَّ نِعْمَتَكَ عَلَيَّ وَعَافِيَتَكَ وَسِتْرَكَ فِي الدُّنْيَا وَالآخِرَةِ.', count: 3, reference: '4. ثلاث مرات' },
+            { id: 'm_18_ushhiduka', text: 'اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلاَئِكَتَكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لاَ إِلَهَ إِلاَّ أَنْتَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ.', count: 4, reference: '5. أربع مرات' },
+            { id: 'm_1_baqarah', text: 'الم * ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ * الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ * وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ * أُولَٰئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ', count: 1, reference: '6. سورة البقرة: 1-5' },
+            { id: 'm_2_kursi', text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ', count: 1, reference: '7. آية الكرسي - البقرة: 255' },
+            { id: 'm_3_amanar', text: 'آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ * لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ', count: 1, reference: '8. سورة البقرة: 285-286' },
+            { id: 'm_4_ghafir', text: 'حم * تَنزِيلُ الْكِتَابِ مِنَ اللَّهِ الْعَزِيزِ الْعَلِيمِ * غَافِرِ الذَّنبِ وَقَابِلِ التَّوْبِ شَدِيدِ الْعِقَابِ ذِي الطَّوْلِ ۖ لَا إِلَٰهَ إِلَّا هُوَ ۖ إِلَيْهِ الْمَصِيرُ', count: 1, reference: '9. سورة غافر: 1-3' },
+            { id: 'm_5_hashr', text: 'هُوَ اللَّهُ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ ۖ عَالِمُ الْغَيْبِ وَالشَّهَادَةِ ۖ هُوَ الرَّحْمَٰنُ الرَّحِيمُ * هُوَ اللَّهُ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ الْمَلِكُ الْقُدُّوسُ السَّلَامُ الْمُؤْمِنُ الْمُهَيْمِنُ الْعَزِيزُ الْجَبَّارُ الْمُتَكَبِّرُ ۚ سُبْحَانَ اللَّهِ عَمَّا يُشْرِكُونَ * هُوَ اللَّهُ الْخَالِقُ الْبَارِئُ الْمُصَوِّرُ ۖ لَهُ الْأَسْمَاءُ الْحُسْنَىٰ ۚ يُسَبِّحُ لَهُ مَا فِي السَّمَاوَاتِ وَالْأَرْضِ ۖ وَهُوَ الْعَزِيزُ الْحَكِيمُ', count: 1, reference: '10. سورة الحشر: 22-24' },
+            { id: 'm_6_ikhlas', text: 'قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', count: 3, reference: '11. سورة الإخلاص (3 مرات)' },
+            { id: 'm_6_falaq', text: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ', count: 3, reference: '12. سورة الفلق (3 مرات)' },
+            { id: 'm_6_nas', text: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَٰهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ', count: 3, reference: '13. سورة الناس (3 مرات)' },
+            { id: 'm_7_kalimat', text: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.', count: 3, reference: '14. رواه مسلم (3 مرات)' },
+            { id: 'm_8_bismillah', text: 'بِسْمِ اللَّهِ الَّذِي لاَ يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلاَ فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.', count: 3, reference: '15. رواه أبو داود والترمذي (3 مرات)' },
+            { id: 'm_9_radhitu', text: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلاَمِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا.', count: 3, reference: '16. رواه أبو داود والترمذي (3 مرات)' },
+            { id: 'm_14_hamm', text: 'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّجَالِ.', count: 1, reference: '17. رواه البخاري' },
+            { id: 'm_15_afiyah', text: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي.', count: 1, reference: '18. رواه أبو داود' },
+            { id: 'm_16_sayyid', text: 'اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ.', count: 1, description: 'سيد الاستغفار', reference: '19. رواه البخاري' },
+            { id: 'm_17_fatir', text: 'اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالأَرْضِ، عَالِمَ الْغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءًا أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ.', count: 1, reference: '20. رواه الترمذي' },
+            { id: 'm_19_lailaha', text: 'لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.', count: 100, reference: '21. مائة مرة' },
+            { id: 'm_20_hasbi', text: 'حَسْبِيَ اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ.', count: 7, reference: '22. سبع مرات' },
+            { id: 'm_21_hasbi_kafa', text: 'حَسْبِيَ اللَّهُ وَكَفَى، سَمِعَ اللَّهُ لِمَنْ دَعَا، لَيْسَ وَرَاءَ اللَّهِ مَرْمَى.', count: 1, reference: '23. ورد في الكتاب' },
+            { id: 'm_22_subhan', text: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.', count: 100, reference: '24. مائة مرة' },
+            { id: 'm_23_istighfar', text: 'أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ.', count: 100, reference: '25. مائة مرة' }
+        ];
+
+        const EVENING_ATHKAR = [
+            { id: 'e_10_amsayna', text: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، وَأَعُوذُ بِكَ مِنْ عَذَابٍ النَّارِ وَعَذَابٍ الْقَبْرِ.', count: 1, reference: '1. رواه مسلم' },
+            { id: 'e_11_bika', text: 'اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.', count: 1, reference: '2. رواه الترمذي' },
+            { id: 'e_12_ma_amsa', text: 'اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لاَ شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ.', count: 1, reference: '3. من قالها فقد أدى شكر ليلته' },
+            { id: 'e_13_ni3ma', text: 'اللَّهُمَّ إِنِّي أَمْسَيْتُ فِي نِعْمَةٍ وَعَافِيَةٍ وَسِتْرٍ، فَأَتِمَّ نِعْمَتَكَ عَلَيَّ وَعَافِيَتَكَ وَسِتْرَكَ فِي الدُّنْيَا وَالآخِرَةِ.', count: 3, reference: '4. ثلاث مرات' },
+            { id: 'e_18_ushhiduka', text: 'اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلاَئِكَتَكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لاَ إِلَهَ إِلاَّ أَنْتَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ.', count: 4, reference: '5. أربع مرات' },
+            { id: 'e_1_baqarah', text: 'الم * ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ * الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ * وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ * أُولَٰئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ', count: 1, reference: '6. سورة البقرة: 1-5' },
+            { id: 'e_2_kursi', text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ', count: 1, reference: '7. آية الكرسي - البقرة: 255' },
+            { id: 'e_3_amanar', text: 'آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ * لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ', count: 1, reference: '8. سورة البقرة: 285-286' },
+            { id: 'e_4_ghafir', text: 'حم * تَنزِيلُ الْكِتَابِ مِنَ اللَّهِ الْعَزِيزِ الْعَلِيمِ * غَافِرِ الذَّنبِ وَقَابِلِ التَّوْبِ شَدِيدِ الْعِقَابِ ذِي الطَّوْلِ ۖ لَا إِلَٰهَ إِلَّا هُوَ ۖ إِلَيْهِ الْمَصِيرُ', count: 1, reference: '9. سورة غافر: 1-3' },
+            { id: 'e_5_hashr', text: 'هُوَ اللَّهُ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ ۖ عَالِمُ الْغَيْبِ وَالشَّهَادَةِ ۖ هُوَ الرَّحْمَٰنُ الرَّحِيمُ * هُوَ اللَّهُ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ الْمَلِكُ الْقُدُّوسُ السَّلَامُ الْمُؤْمِنُ الْمُهَيْمِنُ الْعَزِيزُ الْجَبَّارُ الْمُتَكَبِّرُ ۚ سُبْحَانَ اللَّهِ عَمَّا يُشْرِكُونَ * هُوَ اللَّهُ الْخَالِقُ الْبَارِئُ الْمُصَوِّرُ ۖ لَهُ الْأَسْمَاءُ الْحُسْنَىٰ ۚ يُسَبِّحُ لَهُ مَا فِي السَّمَاوَاتِ وَالْأَرْضِ ۖ وَهُوَ الْعَزِيزُ الْحَكِيمُ', count: 1, reference: '10. سورة الحشر: 22-24' },
+            { id: 'e_6_ikhlas', text: 'قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', count: 3, reference: '11. سورة الإخلاص (3 مرات)' },
+            { id: 'e_6_falaq', text: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ', count: 3, reference: '12. سورة الفلق (3 مرات)' },
+            { id: 'e_6_nas', text: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَٰهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ', count: 3, reference: '13. سورة الناس (3 مرات)' },
+            { id: 'e_7_kalimat', text: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.', count: 3, reference: '14. رواه مسلم (3 مرات)' },
+            { id: 'e_8_bismillah', text: 'بِسْمِ اللَّهِ الَّذِي لاَ يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلاَ فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.', count: 3, reference: '15. رواه أبو داود والترمذي (3 مرات)' },
+            { id: 'e_9_radhitu', text: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلاَمِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا.', count: 3, reference: '16. رواه أبو داود والترمذي (3 مرات)' },
+            { id: 'e_14_hamm', text: 'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّجَالِ.', count: 1, reference: '17. رواه البخاري' },
+            { id: 'e_15_afiyah', text: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي.', count: 1, reference: '18. رواه أبو داود' },
+            { id: 'e_16_sayyid', text: 'اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ.', count: 1, description: 'سيد الاستغفار', reference: '19. رواه البخاري' },
+            { id: 'e_17_fatir', text: 'اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالأَرْضِ، عَالِمَ الْغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءًا أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ.', count: 1, reference: '20. رواه الترمذي' },
+            { id: 'e_19_lailaha', text: 'لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.', count: 100, reference: '21. مائة مرة' },
+            { id: 'e_20_hasbi', text: 'حَسْبِيَ اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ.', count: 7, reference: '22. سبع مرات' },
+            { id: 'e_21_hasbi_kafa', text: 'حَسْبِيَ اللَّهُ وَكَفَى، سَمِعَ اللَّهُ لِمَنْ دَعَا، لَيْسَ وَرَاءَ اللَّهِ مَرْمَى.', count: 1, reference: '23. ورد في الكتاب' },
+            { id: 'e_22_subhan', text: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.', count: 100, reference: '24. مائة مرة' },
+            { id: 'e_23_istighfar', text: 'أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ.', count: 100, reference: '25. مائة مرة' }
+        ];
+
+        // State
+        let currentTab = 'morning';
+        let progress = {};
+        let settings = {
+            fontSize: 'medium',
+            hapticFeedback: false,
+            theme: 'dark'
+        };
+
+        // Initialize
+        function init() {
+            loadSettings();
+            loadProgress();
+            applyTheme();
+            renderAthkar();
+            updateProgress();
+
+            setTimeout(() => {
+                document.getElementById('splashScreen').classList.add('hidden');
+            }, 2500);
+        }
+
+        // LocalStorage Functions
+        function loadSettings() {
+            const saved = localStorage.getItem('athkar_settings_v6');
+            if (saved) {
+                settings = JSON.parse(saved);
+            }
+        }
+
+        function saveSettings() {
+            localStorage.setItem('athkar_settings_v6', JSON.stringify(settings));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('athkar_progress_v6');
+            if (saved) {
+                progress = JSON.parse(saved);
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('athkar_progress_v6', JSON.stringify(progress));
+        }
+
+        // Theme Functions
+        function applyTheme() {
+            if (settings.theme === 'dark') {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        }
+
+        function setTheme(theme) {
+            settings.theme = theme;
+            saveSettings();
+            applyTheme();
+
+            const options = document.querySelectorAll('.settings-section')[0].querySelectorAll('.setting-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            if (theme === 'light') {
+                options[0].classList.add('active');
+            } else {
+                options[1].classList.add('active');
+            }
+        }
+
+        function setFontSize(size) {
+            settings.fontSize = size;
+            saveSettings();
+
+            const preview = document.getElementById('fontPreview');
+            preview.className = 'font-preview-text ' + size;
+
+            const options = document.querySelectorAll('.settings-section')[1].querySelectorAll('.setting-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            if (size === 'small') {
+                options[0].classList.add('active');
+            } else if (size === 'medium') {
+                options[1].classList.add('active');
+            } else {
+                options[2].classList.add('active');
+            }
+
+            renderAthkar();
+        }
+
+        function toggleHaptic() {
+            settings.hapticFeedback = !settings.hapticFeedback;
+            saveSettings();
+
+            const toggle = document.getElementById('hapticToggle');
+            if (settings.hapticFeedback) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+        }
+
+        // Tab Functions
+        function switchTab(tab) {
+            currentTab = tab;
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const navBtns = document.querySelectorAll('.nav-btn');
+
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            navBtns.forEach(btn => btn.classList.remove('active'));
+
+            if (tab === 'morning') {
+                tabBtns[0].classList.add('active');
+                navBtns[0].classList.add('active');
+                document.getElementById('resetAllText').textContent = 'تصفير أذكار الصباح';
+            } else {
+                tabBtns[1].classList.add('active');
+                navBtns[1].classList.add('active');
+                document.getElementById('resetAllText').textContent = 'تصفير أذكار المساء';
+            }
+
+            renderAthkar();
+            updateProgress();
+        }
+
+        // Render Functions
+        function renderAthkar() {
+            const list = document.getElementById('athkarList');
+            const athkar = currentTab === 'morning' ? MORNING_ATHKAR : EVENING_ATHKAR;
+
+            list.innerHTML = athkar.map(thikr => {
+                const currentCount = progress[thikr.id] || 0;
+                const isCompleted = currentCount >= thikr.count;
+                const progressPercent = (currentCount / thikr.count) * 100;
+
+                return `
+                    <div class="thikr-card ${isCompleted ? 'completed' : ''}">
+                        ${isCompleted ? `
+                            <div class="completed-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        ` : ''}
+
+                        <div class="thikr-reference">${thikr.reference || 'ذكر'}</div>
+
+                        <p class="thikr-text ${settings.fontSize}">${thikr.text}</p>
+
+                        ${thikr.description ? `
+                            <p class="thikr-description">${thikr.description}</p>
+                        ` : ''}
+
+                        <div class="thikr-counter-container">
+                            <div class="counter-wrapper">
+                                <button
+                                    class="counter-btn ${isCompleted ? 'completed' : ''}"
+                                    onclick="incrementThikr('${thikr.id}')"
+                                    ${isCompleted ? 'disabled' : ''}
+                                >
+                                    <div class="counter-label">
+                                        ${isCompleted ? 'تم بحمد الله' : 'اضغط للتسبيح'}
+                                    </div>
+                                    <div class="counter-numbers">
+                                        ${isCompleted ? thikr.count : currentCount} / ${thikr.count}
+                                    </div>
+                                </button>
+
+                                <button class="reset-thikr-btn" onclick="resetThikr('${thikr.id}')" aria-label="تصفير هذا الذكر">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="thikr-progress-bar">
+                                <div class="thikr-progress-fill" style="width: ${progressPercent}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateProgress() {
+            const athkar = currentTab === 'morning' ? MORNING_ATHKAR : EVENING_ATHKAR;
+            const completedCount = athkar.filter(thikr => (progress[thikr.id] || 0) >= thikr.count).length;
+            const totalCount = athkar.length;
+            const percent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        // Counter Functions
+        function incrementThikr(id) {
+            const athkar = currentTab === 'morning' ? MORNING_ATHKAR : EVENING_ATHKAR;
+            const thikr = athkar.find(a => a.id === id);
+
+            if (!thikr) return;
+
+            const currentCount = progress[id] || 0;
+
+            if (currentCount < thikr.count) {
+                progress[id] = currentCount + 1;
+                saveProgress();
+
+                if (settings.hapticFeedback && navigator.vibrate) {
+                    try {
+                        navigator.vibrate([70]);
+                    } catch (e) {
+                        console.error('Haptic failed:', e);
+                    }
+                }
+
+                renderAthkar();
+                updateProgress();
+            }
+        }
+
+        function resetThikr(id) {
+            if (settings.hapticFeedback && navigator.vibrate) {
+                navigator.vibrate([30]);
+            }
+
+            progress[id] = 0;
+            saveProgress();
+            renderAthkar();
+            updateProgress();
+        }
+
+        function resetAll() {
+            const athkar = currentTab === 'morning' ? MORNING_ATHKAR : EVENING_ATHKAR;
+
+            athkar.forEach(thikr => {
+                delete progress[thikr.id];
+            });
+
+            saveProgress();
+
+            if (settings.hapticFeedback && navigator.vibrate) {
+                navigator.vibrate([50, 50, 50]);
+            }
+
+            renderAthkar();
+            updateProgress();
+        }
+
+        // Modal Functions
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('show');
+
+            const themeOptions = document.querySelectorAll('.settings-section')[0].querySelectorAll('.setting-option');
+            themeOptions.forEach(opt => opt.classList.remove('active'));
+            if (settings.theme === 'light') {
+                themeOptions[0].classList.add('active');
+            } else {
+                themeOptions[1].classList.add('active');
+            }
+
+            const fontOptions = document.querySelectorAll('.settings-section')[1].querySelectorAll('.setting-option');
+            fontOptions.forEach(opt => opt.classList.remove('active'));
+            if (settings.fontSize === 'small') {
+                fontOptions[0].classList.add('active');
+            } else if (settings.fontSize === 'medium') {
+                fontOptions[1].classList.add('active');
+            } else {
+                fontOptions[2].classList.add('active');
+            }
+
+            const preview = document.getElementById('fontPreview');
+            preview.className = 'font-preview-text ' + settings.fontSize;
+
+            const toggle = document.getElementById('hapticToggle');
+            if (settings.hapticFeedback) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('show');
+        }
+
+        document.getElementById('settingsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSettings();
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
